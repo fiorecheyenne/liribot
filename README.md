@@ -13,4 +13,4 @@ node.js
 javascript (obv)
 
 heres the working product:
-<img src="workinglirl.gif">
+<img src="workingliri.gif">
