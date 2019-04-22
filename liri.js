@@ -9,6 +9,8 @@ var todo = process.argv[2];
 var param = process.argv[3];
 const chalk = require("chalk");
 
+const moment = require("moment");
+
 // cases
 switch (todo) {
   case "spotify-this-song":
@@ -27,7 +29,9 @@ switch (todo) {
     dothething();
     break;
   default:
-    console.log("Try again lil chicken McThuggit - that one is invalid");
+    console.log(
+      "Try again lil chicken McThuggit - try one of these - \n~~**~~**~*~*~*~\nconcert-this \nspotify-this-song\nmovie-this\ndo-what-it-says"
+    );
 }
 
 //spotify this song
@@ -38,14 +42,35 @@ function spotify(param) {
   }
   spotify.search({ type: "track", query: param }, function(err, data) {
     if (err) {
-      console.log("Error Occurred:" + err);
+      console.log(chalk.red("Error Occurred:" + err));
       return;
     } else {
       var songData = data.tracks.items;
-      console.log("Artist(s): " + songData[0].artists[0].name);
-      console.log("Song Name: " + songData[0].name);
-      console.log("Preview: " + songData[0].preview_url);
-      console.log("Album: " + songData[0].album.name);
+      for (var i = 0; i < songData.length; i++) {
+        console.log(
+          chalk.greenBright.underline.bold("\n~*~*~*~*SONG INFO*~*~*~*~\n")
+        );
+        fs.appendFileSync("log.txt", "~*~*~*~*SONG INFO*~*~*~*~");
+        console.log("Result #:" + i);
+        fs.appendFileSync("log.txt", i + "\n");
+        console.log(
+          chalk.green.bold("Artist(s): ") + songData[i].artists[i].name
+        );
+        fs.appendFileSync(
+          "log.txt",
+          "artist(s): " + songData[i].artists[i].name + "\n"
+        );
+        console.log(chalk.green.bold("Song Name: ") + songData[i].name);
+        fs.appendFileSync("log.txt", "song name: " + songData[i].name + "\n");
+        console.log(chalk.green.bold("Preview: ") + songData[i].preview_url);
+        fs.appendFileSync(
+          "log.txt",
+          "preview song: " + songData[i].preview_url + "\n"
+        );
+        console.log(chalk.green.bold("Album: ") + songData[i].album.name);
+        fs.appendFileSync("log.txt", "album: " + songData[i].album.name + "\n");
+        // console.log("\n~*~*~*~*~*~*~*~*~*~*~*~*~*\n");
+      }
     }
   });
 }
@@ -60,15 +85,25 @@ function band(param) {
     if (!error && response.statusCode === 200) {
       var bandish = JSON.parse(body);
       for (var i = 0; i < bandish.length; i++) {
-        console.log("~*~*~*~*~*~*Event*~*~*~*~*~*~*~");
-        console.log(i);
-        console.log("Venue: " + bandish[i].venue.name);
-        console.log("Date: " + bandish[i].datetime);
-        console.log("Where: " + bandish[i].venue.city);
-        console.log("*~*~*~*~*~*~*~*~*~*~*");
+        console.log(chalk.magenta.bold("\n~*~*~*~*~*~*Event*~*~*~*~*~*~*~\n"));
+        fs.appendFileSync("log.txt", "\n~*~*~*~*~*~*Event*~*~*~*~*~*~*~\n");
+
+        console.log("Result #: " + i);
+        fs.appendFileSync("log.txt", i + "\n");
+
+        console.log(chalk.magenta("Date: ") + bandish[i].datetime);
+        fs.appendFileSync("log.txt", "Date " + bandish[i].datetime);
+
+        console.log(chalk.magenta("Where: ") + bandish[i].venue.city);
+        fs.appendFileSync("log.txt", "Where: " + bandish[i].venue.city);
+
+        console.log(chalk.magenta("Venue: ") + bandish[i].venue.name);
+        fs.appendFileSync("log.txt", "Venue:" + bandish[i].venue.name);
       }
     } else {
-      console.log("oopsies :(");
+      console.log(
+        chalk.red.bold("oopsies :( Couldnt find anything for") + param
+      );
     }
   });
 }
@@ -84,13 +119,36 @@ function movie(param) {
     }
 
     if (!error && response.statusCode === 200) {
-      console.log("Mooooobie: " + JSON.parse(body).Title);
-      console.log("Year: " + JSON.parse(body).Year);
-      console.log("IMDB rate: " + JSON.parse(body).imdbRating);
-      console.log("To-Mah-TOES: " + JSON.parse(body).Ratings[1].Value);
-      console.log("Country: " + JSON.parse(body).Country);
-      console.log("Plot: " + JSON.parse(body).Pilot);
-      console.log("Actors: " + JSON.parse(body).Actors);
+      console.log(chalk.cyan.bold("\n~**~~*~**~Moooooobie Info~**~*~~**~\n"));
+      fs.appendFileSync("log.txt", "\n~**~~*~**~Moooooobie Info~**~*~~**~\n");
+
+      console.log(chalk.cyan.bold("Mooooobie: ") + JSON.parse(body).Title);
+      fs.appendFileSync("log.txt", "Mooooobie: " + body.Title + "\n");
+
+      console.log(chalk.cyan.bold("Year: ") + JSON.parse(body).Year);
+      fs.appendFileSync("log.txt", "Year: " + body.Year + "\n");
+
+      console.log(chalk.cyan.bold("IMDB rate: ") + JSON.parse(body).imdbRating);
+      fs.appendFileSync("log.txt", "IMDB Rating: " + body.imdbRating + "\n");
+
+      console.log(
+        chalk.cyan.bold("To-Mah-TOES: ") + JSON.parse(body).Ratings[0].Value
+      );
+      // fs.appendFileSync(
+      //   "log.txt",
+      //   "Rotten Tomatoes Rating: " + body.Ratings[0].Value + "\n"
+      // );
+
+      console.log(chalk.cyan.bold("Country: ") + JSON.parse(body).Country);
+      fs.appendFileSync("log.txt", "Country: " + body.Country + "\n");
+
+      console.log(chalk.cyan.bold("Lang: ") + JSON.parse(body).Language);
+      fs.appendFileSync("log.txt", "Lang: " + body.Language);
+      console.log(chalk.cyan.bold("Plot: ") + JSON.parse(body).Pilot);
+      fs.appendFileSync("log.txt", "Plot: " + body.Plot + "\n");
+
+      console.log(chalk.cyan.bold("Actors: ") + JSON.parse(body).Actors);
+      fs.appendFileSync("log.txt", "Actors: " + body.Actors + "\n");
     }
   });
 }
