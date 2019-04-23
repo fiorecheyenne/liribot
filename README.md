@@ -11,6 +11,7 @@ Moment<br>
 DotEnv<br>
 node.js<br>
 javascript (obv)<br>
+Chalk<br>
 
 <b>Heres the working product:</b>
 <img src="att1.gif">
