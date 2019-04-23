@@ -46,7 +46,7 @@ function spotify(param) {
       return;
     } else {
       var songData = data.tracks.items;
-      for (var i = 0; i < songData.length; i++) {
+      for (var i = 0; i < 1; i++) {
         console.log(
           chalk.greenBright.underline.bold("\n~*~*~*~*SONG INFO*~*~*~*~\n")
         );
@@ -84,7 +84,7 @@ function band(param) {
   request(queryUrl, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       var bandish = JSON.parse(body);
-      for (var i = 0; i < bandish.length; i++) {
+      for (var i = 0; i < 5; i++) {
         console.log(chalk.magenta.bold("\n~*~*~*~*~*~*Event*~*~*~*~*~*~*~\n"));
         fs.appendFileSync("log.txt", "\n~*~*~*~*~*~*Event*~*~*~*~*~*~*~\n");
 
@@ -99,11 +99,12 @@ function band(param) {
 
         console.log(chalk.magenta("Venue: ") + bandish[i].venue.name);
         fs.appendFileSync("log.txt", "Venue:" + bandish[i].venue.name);
+
+        // else {
+        //       console.log(
+        //         chalk.red.bold("oopsies :( Couldnt find anything for") + param
+        //       );
       }
-    } else {
-      console.log(
-        chalk.red.bold("oopsies :( Couldnt find anything for") + param
-      );
     }
   });
 }
@@ -144,7 +145,7 @@ function movie(param) {
 
       console.log(chalk.cyan.bold("Lang: ") + JSON.parse(body).Language);
       fs.appendFileSync("log.txt", "Lang: " + body.Language);
-      console.log(chalk.cyan.bold("Plot: ") + JSON.parse(body).Pilot);
+      console.log(chalk.cyan.bold("Plot: ") + JSON.parse(body).Plot);
       fs.appendFileSync("log.txt", "Plot: " + body.Plot + "\n");
 
       console.log(chalk.cyan.bold("Actors: ") + JSON.parse(body).Actors);
